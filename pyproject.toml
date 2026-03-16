@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "genesys_sdk"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "simple_sdk @ git+https://github.com/jj136975/SimpleSDK.git@v0.1.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["genesys_sdk*"]
+exclude = ["tests*"]

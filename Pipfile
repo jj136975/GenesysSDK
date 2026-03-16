@@ -1,0 +1,12 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+simple_sdk = { git = "git+https://github.com/jj136975/SimpleSDK.git", version = "0.1.0" }
+
+[dev-packages]
+
+[requires]
+python_version = "3.13"

@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from typing import Literal, Self, override
-from abc import ABC
 
 from serde import serde
 
-from .filter import QueryFilter, SegmentDetailQueryPredicate
+from .filter import QueryFilter, SegmentDetailQueryPredicate, ConversationDetailQueryPredicate
 from ....request.paging import IPageQuery
 
 
@@ -35,7 +34,7 @@ class ConversationQuery(IPageQuery):
     # # Include faceted search and aggregate roll-ups describing your search results. This does not function as a filter, but rather, summary data about the data matching your filters
     # aggregations: list[AnalyticsQueryAggregation] | None = None
     # # Filters that target conversation-level data
-    # conversation_filters: list[QueryFilter[ConversationDetailQueryPredicate] | None] = None
+    conversation_filters: list[QueryFilter[ConversationDetailQueryPredicate] | None] = None
     # # Filters that target evaluations
     # evaluation_filters: list[QueryFilter[EvaluationDetailQueryPredicate] | None] = None
     # # Filters that target resolutions
@@ -52,7 +51,7 @@ class ConversationQuery(IPageQuery):
             paging=PagingSpec(page_number=page, page_size=self.paging.page_size),
             segment_filters=self.segment_filters,
             # aggregations=self.aggregations,
-            # conversation_filters=self.conversation_filters,
+            conversation_filters=self.conversation_filters,
             # evaluation_filters=self.evaluation_filters,
             # resolution_filters=self.resolution_filters,
             # survey_filters=self.survey_filters

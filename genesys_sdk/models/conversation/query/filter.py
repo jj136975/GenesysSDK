@@ -16,7 +16,7 @@ class QueryClause[T]:
 @serde(rename_all='camelcase')
 class QueryFilter[T]:
     # Boolean 'and/or' logic with up to two-levels of nesting
-    clauses: list[QueryClause[T] | None] = None
+    clauses: list[QueryClause[T]] | None = None
     # Like a three-word sentence: (attribute-name) (operator) (target-value).
     predicates: list[T] | None = None
     # Boolean operation to apply to the provided predicates and clauses

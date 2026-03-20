@@ -29,18 +29,18 @@ class ConversationQuery(IPageQuery):
     # Specify which data element within the result set to use for sorting. The options  to use as a basis for sorting the results: conversationStart, segmentStart, and segmentEnd. If not specified, the default is conversationStart
     order_by: OrderBy = "conversationStart"
     # Filters that target individual segments within a conversation
-    segment_filters: list[QueryFilter[SegmentDetailQueryPredicate] | None] = None
+    segment_filters: list[QueryFilter[SegmentDetailQueryPredicate]] | None = None
 
     # # Include faceted search and aggregate roll-ups describing your search results. This does not function as a filter, but rather, summary data about the data matching your filters
     # aggregations: list[AnalyticsQueryAggregation] | None = None
     # # Filters that target conversation-level data
-    conversation_filters: list[QueryFilter[ConversationDetailQueryPredicate] | None] = None
+    conversation_filters: list[QueryFilter[ConversationDetailQueryPredicate]] | None = None
     # # Filters that target evaluations
-    # evaluation_filters: list[QueryFilter[EvaluationDetailQueryPredicate] | None] = None
+    # evaluation_filters: list[QueryFilter[EvaluationDetailQueryPredicate]] | None = None
     # # Filters that target resolutions
-    # resolution_filters: list[QueryFilter[ResolutionDetailQueryPredicate] | None] = None
+    # resolution_filters: list[QueryFilter[ResolutionDetailQueryPredicate]] | None = None
     # # Filters that target surveys
-    # survey_filters: list[QueryFilter[SurveyDetailQueryPredicate] | None] = None
+    # survey_filters: list[QueryFilter[SurveyDetailQueryPredicate]] | None = None
 
     @override
     def update_page(self, page: int) -> Self:

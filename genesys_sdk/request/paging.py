@@ -1,13 +1,13 @@
 import asyncio
 from abc import ABC, abstractmethod
-from typing import Callable, TypeVar, List, Type, Self, Coroutine, Any, Tuple, \
-    Awaitable, TYPE_CHECKING, AsyncIterator, Protocol, Optional, Generator
+from typing import Callable, TypeVar, Self, Coroutine, Any, \
+    Awaitable, TYPE_CHECKING, AsyncIterator, Generator
 
 from aiohttp.typedefs import StrOrURL
 from serde import to_dict
+from simple_sdk.errors import ClientError
 
 from ..api.base_api import GenesysBaseApi
-from simple_sdk.errors import ClientError
 
 
 class IPageQuery(ABC):
@@ -30,7 +30,7 @@ class PagesInfo:
         self.total_items = total_items
         self.total_pages = (total_items - 1) // page_size + 1
 
-    def iter_query(self, start: int, query: IPageQuery) -> Generator[Tuple[int, IPageQuery], None, None]:
+    def iter_query(self, start: int, query: IPageQuery) -> Generator[tuple[int, IPageQuery], None, None]:
         """
         Iterate over the pages starting from the given page number.
         :param start: The page number to start from.
@@ -48,9 +48,9 @@ class PagesInfo:
 TContent = TypeVar("TContent")
 
 
-class IPageResponse(Protocol):
+class IPageResponse(ABC):
     @abstractmethod
-    def get_content(self) -> List[TContent]:
+    def get_content(self) -> list[TContent]:
         ...
 
     @abstractmethod
@@ -76,8 +76,8 @@ class PagedResponse[TPage: IPageResponse, TContent]:
                 methode: str,
                 url: StrOrURL,
                 query: IPageQuery,
-                cls: Type[TPage],
-                batch_size: Optional[int] = None,
+                cls: type[TPage],
+                batch_size: int | None = None,
                 **kwargs: Unpack[RetryOptions]
         ):
             ...
@@ -89,7 +89,7 @@ class PagedResponse[TPage: IPageResponse, TContent]:
                 url: StrOrURL,
                 query: IPageQuery,
                 cls: Type[TPage],
-                batch_size: Optional[int] = None,
+                batch_size: int | None = None,
                 **kwargs: Any
         ):
             self._client = client
@@ -111,10 +111,10 @@ class PagedResponse[TPage: IPageResponse, TContent]:
         query = self._query.update_page(page)
         return await self._query_request(query)
 
-    async def with_processor(self, processor: Callable[[int, List[TContent]], Coroutine[Any, Any, TRet]]) -> Tuple[
-            List[TRet], List[ClientError]]:
+    async def with_processor(self, processor: Callable[[int, list[TContent]], Coroutine[Any, Any, TRet]]) -> tuple[
+            list[TRet], list[ClientError]]:
 
-        async def process_page(page_number: int, query: IPageQuery) -> Tuple[TRet, TPage] | ClientError:
+        async def process_page(page_number: int, query: IPageQuery) -> tuple[TRet, TPage] | ClientError:
             try:
                 response = await self._query_request(query)
             except ClientError as err:
@@ -151,9 +151,9 @@ class PagedResponse[TPage: IPageResponse, TContent]:
                 results.append(res[0])
         return results, errors
 
-    def __aiter__(self) -> AsyncIterator[Awaitable[Tuple[int, List[TContent]]]]:
+    def __aiter__(self) -> AsyncIterator[Awaitable[tuple[int, list[TContent]]]]:
 
-        async def to_aiter() -> AsyncIterator[Awaitable[Tuple[int, List[TContent]]]]:
+        async def to_aiter() -> AsyncIterator[Awaitable[tuple[int, list[TContent]]]]:
             fut = asyncio.Future()
             try:
                 page = await self._query_request(self._query)
@@ -175,7 +175,7 @@ class PagedResponse[TPage: IPageResponse, TContent]:
             if info.total_pages <= 1:
                 return
 
-            async def create_task(page_number: int, query: IPageQuery) -> Tuple[int, List[TContent]]:
+            async def create_task(page_number: int, query: IPageQuery) -> tuple[int, list[TContent]]:
                 response = await self._query_request(query)
                 return page_number, response.get_content()
 

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from abc import ABC
 from datetime import datetime
 from typing import Self, override
 
 from serde import serde
 
 from ...request.paging import IPageResponse, IPageQuery
+
 
 @serde(rename_all='camelcase')
 class SkillListingQuery(IPageQuery):
@@ -27,6 +27,7 @@ class SkillListingQuery(IPageQuery):
     def set_page_size(self, page_size: int):
         self.page_size = page_size
 
+
 @serde(rename_all='camelcase')
 class RoutingSkill:
     # Date last modified. Date time is represented as an ISO-8601 string. For example: yyyy-MM-ddTHH:mm:ss[.mmm]Z
@@ -44,7 +45,7 @@ class RoutingSkill:
 
 
 @serde(rename_all='camelcase')
-class SkillEntityListing(IPageResponse, ABC):
+class SkillEntityListing(IPageResponse):
     #
     entities: list[RoutingSkill] | None = None
     #

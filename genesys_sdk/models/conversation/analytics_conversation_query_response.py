@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-from abc import ABC
 from typing import override
 
 from serde import serde
 
-from ...request.paging import IPageResponse
 from .aggregation_result import AggregationResult
 from .analytics_conversation_without_attributes import AnalyticsConversationWithoutAttributes
+from ...request.paging import IPageResponse
 
 
 @serde(rename_all='camelcase')
-class AnalyticsConversationQueryResponse(IPageResponse, ABC):
+class AnalyticsConversationQueryResponse(IPageResponse):
     #
     aggregations: list[AggregationResult] | None = None
     #

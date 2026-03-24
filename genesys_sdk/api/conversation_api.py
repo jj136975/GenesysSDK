@@ -9,6 +9,7 @@ from ..models.email.email_conversation import EmailConversation
 from ..models.email.email_message import EmailMessage
 from ..models.email.email_message_listing import EmailMessageListing
 from ..models.conversation.query.conversation_query import ConversationQuery
+from ..models.queue import QueueEntityListing, QueueEntity, QueueListingQuery
 from ..models.skill import SkillEntityListing
 from ..models.skill.routing_skill import SkillListingQuery, RoutingSkill
 from ..request.paging import PagedResponse
@@ -128,9 +129,26 @@ class ConversationApi(GenesysBaseApi):
             self,
             'GET',
             '/api/v2/routing/skills',
-            query if query else SkillListingQuery(),
+            query or SkillListingQuery(),
             SkillEntityListing,
             batch_size,
+            retry_status=500,
+            max_retries=3,
+            retry_delay=2,
+        )
+
+    def get_queues(self, query: QueueListingQuery | None = None) -> PagedResponse[QueueEntityListing, QueueEntity]:
+        """
+        Get routing queues.
+        :param query: The query to execute.
+        :return: Routing queues.
+        """
+        return PagedResponse[QueueEntityListing, QueueEntity](
+            self,
+            'GET',
+            '/api/v2/routing/queues',
+            query or QueueListingQuery(),
+            QueueEntityListing,
             retry_status=500,
             max_retries=3,
             retry_delay=2,

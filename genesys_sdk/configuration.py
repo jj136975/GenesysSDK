@@ -7,7 +7,7 @@ import sys
 from configparser import ConfigParser, MissingSectionHeaderError
 from dataclasses import dataclass, field
 from os.path import expanduser
-from typing import Any, Optional
+from typing import Any
 
 from aiohttp import ClientSession, TCPConnector
 
@@ -36,21 +36,21 @@ class GenesysConfiguration(BaseConfiguration):
     """Delay in seconds for 202 (Request Not Ready) retries."""
 
     # Temp file folder for downloading files
-    temp_folder_path: Optional[str] = None
+    temp_folder_path: str | None = None
 
     # SSL/TLS verification
     verify_ssl: bool = True
-    ssl_ca_cert: Optional[str] = None
-    cert_file: Optional[str] = None
-    key_file: Optional[str] = None
+    ssl_ca_cert: str | None = None
+    cert_file: str | None = None
+    key_file: str | None = None
 
     # Proxy (uses trust_env=True — set HTTP_PROXY/HTTPS_PROXY env vars)
-    proxy: Optional[str] = None
-    proxy_username: Optional[str] = None
-    proxy_password: Optional[str] = None
+    proxy: str | None = None
+    proxy_username: str | None = None
+    proxy_password: str | None = None
 
     # Gateway
-    gateway_configuration: Optional[str] = None
+    gateway_configuration: str | None = None
 
     # Logging
     logger: Logger = field(default_factory=Logger)
@@ -142,14 +142,14 @@ SDK Package Version: 226.0.0"""
             print("[Error] Could not update config:", e)
 
 
-def _get_config_string(config, section: str, key: str) -> Optional[str]:
+def _get_config_string(config, section: str, key: str) -> str | None:
     try:
         return str(config[section][key]).strip()
     except:
         return None
 
 
-def _get_config_bool(config, section: str, key: str) -> Optional[bool]:
+def _get_config_bool(config, section: str, key: str) -> bool | None:
     try:
         return config.getboolean(section, key)
     except:
@@ -157,7 +157,7 @@ def _get_config_bool(config, section: str, key: str) -> Optional[bool]:
     return None
 
 
-def _get_config_int(config, section: str, key: str) -> Optional[int]:
+def _get_config_int(config, section: str, key: str) -> int | None:
     try:
         return config.getint(section, key)
     except:

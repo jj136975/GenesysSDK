@@ -88,7 +88,7 @@ class PagedResponse[TPage: IPageResponse, TContent]:
                 methode: str,
                 url: StrOrURL,
                 query: IPageQuery,
-                cls: Type[TPage],
+                cls: type[TPage],
                 batch_size: int | None = None,
                 **kwargs: Any
         ):

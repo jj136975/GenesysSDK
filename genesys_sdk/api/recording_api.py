@@ -1,5 +1,5 @@
 import asyncio
-from typing import List, Coroutine, Any, Tuple, Optional
+from typing import Coroutine, Any
 
 from aiohttp import ClientSession
 from yarl import URL
@@ -11,7 +11,7 @@ from ..models.recording.recording_metadata import RecordingMetadata
 
 _DOWNLOAD_HEADERS = {"Accept": "application/octet-stream"}
 
-async def _download_recordings(recording: Recording) -> List[Tuple[str, bytes]]:
+async def _download_recordings(recording: Recording) -> list[tuple[str, bytes]]:
 
     async with ClientSession(headers=_DOWNLOAD_HEADERS) as session:
         async def _download(uri: str, channel: str) -> tuple[str, bytes]:
@@ -25,25 +25,25 @@ async def _download_recordings(recording: Recording) -> List[Tuple[str, bytes]]:
         return await asyncio.gather(*tasks)
 
 class RecordingApi(GenesysBaseApi):
-    async def get_conversation_recording_annotations(self, conversation_id: str, recording_id: str) -> List[
+    async def get_conversation_recording_annotations(self, conversation_id: str, recording_id: str) -> list[
         Annotation]:
         return await self.get(
             f" /api/v2/conversations/{conversation_id}/recordings/{recording_id}/annotations",
-            model=List[Annotation],
+            model=list[Annotation],
         )
 
-    async def get_conversation_recordingmetadata(self, conversation_id: str) -> List[RecordingMetadata]:
+    async def get_conversation_recordingmetadata(self, conversation_id: str) -> list[RecordingMetadata]:
         return await self.get(
             f"/api/v2/conversations/{conversation_id}/recordingmetadata",
-            model=List[RecordingMetadata],
+            model=list[RecordingMetadata],
         )
 
-    async def get_conversation_recordings(self, conversation_id: str, format_id: str = "WAV") -> List[Recording]:
+    async def get_conversation_recordings(self, conversation_id: str, format_id: str = "WAV") -> list[Recording]:
         return await self.get(
             f"/api/v2/conversations/{conversation_id}/recordings",
             params={"formatId": format_id},
-            model=List[Recording],
+            model=list[Recording],
         )
 
-    def download_recordings(self, recording: Recording) -> Coroutine[Any, Any, List[Tuple[str, bytes]]]:
+    def download_recordings(self, recording: Recording) -> Coroutine[Any, Any, list[tuple[str, bytes]]]:
         return _download_recordings(recording)

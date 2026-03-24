@@ -2,8 +2,8 @@ from typing import override, Self
 
 from serde import serde
 
-from genesys_sdk.models.division import DivisionEntityRef
-from genesys_sdk.request.paging import IPageResponse, IPageQuery
+from ..division import DivisionEntityRef
+from ...request.paging import IPageResponse, IPageQuery
 
 
 @serde(rename_all='camelcase')

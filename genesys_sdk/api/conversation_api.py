@@ -1,18 +1,21 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from .base_api import GenesysBaseApi
-from ..models.conversation.analytics_conversation_query_response import AnalyticsConversationQueryResponse
-from ..models.conversation.analytics_conversation_without_attributes import AnalyticsConversationWithoutAttributes, \
-    AnalyticsConversationWithoutAttributesMultiGetResponse
-from ..models.call.call_conversation import CallConversation
-from ..models.email.email_conversation import EmailConversation
-from ..models.email.email_message import EmailMessage
-from ..models.email.email_message_listing import EmailMessageListing
-from ..models.conversation.query.conversation_query import ConversationQuery
-from ..models.queue import QueueEntityListing, QueueEntity, QueueListingQuery
-from ..models.skill import SkillEntityListing
-from ..models.skill.routing_skill import SkillListingQuery, RoutingSkill
 from ..request.paging import PagedResponse
+
+if TYPE_CHECKING:
+    from ..models.conversation.analytics_conversation_query_response import AnalyticsConversationQueryResponse
+    from ..models.conversation.analytics_conversation_without_attributes import AnalyticsConversationWithoutAttributes
+    from ..models.call.call_conversation import CallConversation
+    from ..models.email.email_conversation import EmailConversation
+    from ..models.email.email_message import EmailMessage
+    from ..models.email.email_message_listing import EmailMessageListing
+    from ..models.conversation.query.conversation_query import ConversationQuery
+    from ..models.queue import QueueEntityListing, QueueEntity, QueueListingQuery
+    from ..models.skill import SkillEntityListing
+    from ..models.skill.routing_skill import SkillListingQuery, RoutingSkill
 
 
 class ConversationApi(GenesysBaseApi):
@@ -31,6 +34,8 @@ class ConversationApi(GenesysBaseApi):
         :param batch_size: The total number of items to return.
         :return: AnalyticsConversationQueryResponse
         """
+        from ..models.conversation.analytics_conversation_query_response import AnalyticsConversationQueryResponse
+        from ..models.conversation.analytics_conversation_without_attributes import AnalyticsConversationWithoutAttributes
 
         return PagedResponse[AnalyticsConversationQueryResponse, AnalyticsConversationWithoutAttributes](
             self,
@@ -51,6 +56,8 @@ class ConversationApi(GenesysBaseApi):
         :param conversation_id: The ID of the conversation.
         :return: AnalyticsConversationWithoutAttributes
         """
+        from ..models.conversation.analytics_conversation_without_attributes import AnalyticsConversationWithoutAttributes
+
         return await self.get(
             f'/api/v2/analytics/conversations/{conversation_id}/details',
             model=AnalyticsConversationWithoutAttributes,
@@ -63,6 +70,8 @@ class ConversationApi(GenesysBaseApi):
         :param conversation_id: The ID of the conversation.
         :return: AnalyticsConversationWithoutAttributes
         """
+        from ..models.conversation.analytics_conversation_without_attributes import AnalyticsConversationWithoutAttributesMultiGetResponse
+
         return (await self.get(
             f'/api/v2/analytics/conversations/details',
             params={ "id": ",".join(conversation_id) },
@@ -76,6 +85,8 @@ class ConversationApi(GenesysBaseApi):
         :param conversation_id: The ID of the conversation.
         :return: Conversation details.
         """
+        from ..models.call.call_conversation import CallConversation
+
         return await self.get(
             f'/api/v2/conversations/calls/{conversation_id}',
             model=CallConversation,
@@ -88,6 +99,8 @@ class ConversationApi(GenesysBaseApi):
         :param conversation_id: The ID of the conversation.
         :return: Email conversation details.
         """
+        from ..models.email.email_conversation import EmailConversation
+
         return await self.get(
             f'/api/v2/conversations/emails/{conversation_id}',
             model=EmailConversation,
@@ -100,6 +113,8 @@ class ConversationApi(GenesysBaseApi):
         :param conversation_id: The ID of the conversation.
         :return: Email message listing.
         """
+        from ..models.email.email_message_listing import EmailMessageListing
+
         return await self.get(
             f'/api/v2/conversations/emails/{conversation_id}/messages',
             model=EmailMessageListing,
@@ -113,6 +128,8 @@ class ConversationApi(GenesysBaseApi):
         :param message_id: The ID of the message.
         :return: Email message.
         """
+        from ..models.email.email_message import EmailMessage
+
         return await self.get(
             f'/api/v2/conversations/emails/{conversation_id}/messages/{message_id}',
             model=EmailMessage,
@@ -125,6 +142,9 @@ class ConversationApi(GenesysBaseApi):
         :param batch_size: The total number of items to return.
         :return: Routing skills.
         """
+        from ..models.skill import SkillEntityListing
+        from ..models.skill.routing_skill import SkillListingQuery, RoutingSkill
+
         return PagedResponse[SkillEntityListing, RoutingSkill](
             self,
             'GET',
@@ -143,6 +163,8 @@ class ConversationApi(GenesysBaseApi):
         :param query: The query to execute.
         :return: Routing queues.
         """
+        from ..models.queue import QueueEntityListing, QueueEntity, QueueListingQuery
+
         return PagedResponse[QueueEntityListing, QueueEntity](
             self,
             'GET',

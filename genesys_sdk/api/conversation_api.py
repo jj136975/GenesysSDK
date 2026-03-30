@@ -14,8 +14,8 @@ if TYPE_CHECKING:
     from ..models.email.email_message_listing import EmailMessageListing
     from ..models.conversation.query.conversation_query import ConversationQuery
     from ..models.queue import QueueEntityListing, QueueEntity, QueueListingQuery
-    from ..models.skill import SkillEntityListing
-    from ..models.skill.routing_skill import SkillListingQuery, RoutingSkill
+    from ..models.skill.routing_skill import SkillListingQuery, RoutingSkill, SkillEntityListing
+    from ..models.wrapup.wrapup_code import WrapupListingQuery
 
 
 class ConversationApi(GenesysBaseApi):
@@ -171,6 +171,27 @@ class ConversationApi(GenesysBaseApi):
             '/api/v2/routing/queues',
             query or QueueListingQuery(),
             QueueEntityListing,
+            retry_status=500,
+            max_retries=3,
+            retry_delay=2,
+        )
+
+    def get_wrapup_codes(self, query: WrapupListingQuery | None = None, batch_size: int | None = None) -> PagedResponse[WrapupEntityListing, RoutingWrapup]:
+        """
+        Get routing wrapup codes.
+        :param query: The query to execute.
+        :param batch_size: The total number of items to return.
+        :return: Routing wrapup codes.
+        """
+        from ..models.wrapup.wrapup_code import WrapupListingQuery, RoutingWrapup, WrapupEntityListing
+
+        return PagedResponse[WrapupEntityListing, RoutingWrapup](
+            self,
+            'GET',
+            '/api/v2/routing/wrapupcodes',
+            query or WrapupListingQuery(),
+            WrapupEntityListing,
+            batch_size,
             retry_status=500,
             max_retries=3,
             retry_delay=2,

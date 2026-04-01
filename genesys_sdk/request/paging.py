@@ -41,7 +41,6 @@ class PagesInfo:
             q = query.update_page(i)
             yield i, q
         q = query.update_page(self.total_pages)
-        q.set_page_size(self.total_items - self.page_size * (self.total_pages - 1))
         yield self.total_pages, q
 
 
